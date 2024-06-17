@@ -1,0 +1,22 @@
+# Ignore node_modules folder
+frontend/node_modules/
+music_controller/frontend/node_modules
+music_controller/frontend/__pycache__
+music_controller/db.sqlite3
+music_controller/api/__pycache__
+
+# Ignore any compiled or minified JavaScript files
+frontend/build/
+frontend/dist/
+
+# Ignore any local development environment files
+.env
+
+# Ignore database files
+db.sqlite3
+
+# Ignore any compiled Python files
+*.pyc
+
+# Ignore any virtual environment
+venv/
