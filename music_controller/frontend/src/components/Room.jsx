@@ -48,7 +48,7 @@ const Room = ({setRoom}) => {
         if (setting){
             return (
                 <>
-                <CreateRoomPage update={true} code = {roomcode} />
+                <CreateRoomPage update={true} code = {roomcode} guest_can_pauses={guest_can_pause} votes_to_skips={votes_to_skip} />
                 <button className='bg-pink-700 text-white p-6 mr-10 rounded-full hover:bg-yellow-700 fixed right-10 top-10 ' onClick={()=>{setsetting(false)}}>Back to Room</button>
 
                 </>

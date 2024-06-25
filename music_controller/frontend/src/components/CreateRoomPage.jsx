@@ -1,12 +1,12 @@
 import React from 'react'
 import '../../static/css/index.css'
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { Link } from 'react-router-dom'
 import { useSelector, useDispatch } from 'react-redux'
 import { save } from '../redux/codeRoom/roomCode'
 import { useNavigate } from 'react-router-dom';
 
-const CreateRoomPage = ({update,code}) => {
+const CreateRoomPage = ({update,code,guest_can_pauses,votes_to_skips}) => {
   const [guest_can_pause, setGuest_can_pause] = useState(true)
   const [votes_to_skip, setVotes_to_skip] = useState(2)
   const navigate = useNavigate();
@@ -21,6 +21,15 @@ const CreateRoomPage = ({update,code}) => {
     const value = e.target.id === 'PlayPause';
     setGuest_can_pause(value);
   };
+  // setGuest_can_pause(guest_can_pauses)
+  // setVotes_to_skip(votes_to_skip)
+  useEffect(() => {
+    if (update) {
+      setGuest_can_pause(guest_can_pauses);
+      setVotes_to_skip(votes_to_skips);
+    }
+  }, [update, guest_can_pauses, votes_to_skips]);
+
 
   const handleRoomButton = () => {
     const requestOptions = {
@@ -31,7 +40,7 @@ const CreateRoomPage = ({update,code}) => {
         guest_can_pause: guest_can_pause,
       }),
     };
-
+    
     fetch("/api/create-room", requestOptions)
       .then((response) => response.json())
       .then((data) => {
@@ -51,6 +60,7 @@ const CreateRoomPage = ({update,code}) => {
         guest_can_pause: guest_can_pause,
         code: codes
       }),
+      
     };
 
     fetch("/api/update-room", requestOptions)
@@ -60,6 +70,7 @@ const CreateRoomPage = ({update,code}) => {
         console.log("codes is:"+codes);
         if (response.ok) {
           setMsg("Updated Room successfully!");
+          // getRoomDetails()
         } else {
           setMsg("Some Error Occurred!!!");
         }
