@@ -1,12 +1,18 @@
-from .import views
+# from .import views
+from .views import index
 from django.urls import path
 
+app_name = 'frontend'
 urlpatterns = [
     
-    path('',views.index,name = 'index.html'),
-    path('join/1',views.index,name = 'index.html'), 
-    path('join',views.index,name = 'index.html'), 
-    path('create',views.index,name = 'index.html'),
-    path('update',views.index,name = 'index.html'),
-    path('room/<str:roomCode>',views.index,name = 'index.html'),
+    path('', index, name=''),  # Ensure your home path has a name
+    path('join', index),
+    path('create', index),
+    path('room/<str:roomCode>', index),
+    # path('room/<str:roomCode>',views.index),
+    # path('',views.index,name = ''),
+    # # path('join/1',views.index,name = 'index.html'), 
+    # path('join',views.index), 
+    # path('create',views.index),
+    # path('update',views.index,name = 'index.html'),
 ]

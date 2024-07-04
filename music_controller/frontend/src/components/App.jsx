@@ -1,56 +1,64 @@
-import React from 'react'
-import { render } from 'react-dom'
-import { BrowserRouter, Routes, Route ,Redirect, Navigate} from "react-router-dom"; // Import Routes
-import Homepage from './Homepage.jsx'
-import CreateRoomPage from './CreateRoomPage.jsx'
-import RoomjoinPage from './RoomjoinPage.jsx'
+import React, { useEffect, useState } from 'react';
+import { render } from 'react-dom';
+import { BrowserRouter, Routes, Route, Navigate, useNavigate } from 'react-router-dom';
+import Homepage from './Homepage.jsx';
+import CreateRoomPage from './CreateRoomPage.jsx';
+import RoomjoinPage from './RoomjoinPage.jsx';
 import Room from './Room.jsx';
-// import '../../static/css/index.css'
-// import '../../output.css'; 
 import '../index.css';
 import { store } from '../redux/store.js';
-import {Provider} from 'react-redux';
-import {useEffect, useState } from 'react';
+import { Provider } from 'react-redux';
 import UpdateRoom from './UpdateRoom.jsx';
-// import '../index.css'
+
 const App = () => {
   const [roomCode, setRoomCode] = useState(null);
 
-  useEffect(() => {
-    const fetchData = async () => {
-      const response = await fetch("/api/user-in-room");
-      const data = await response.json();
-      setRoomCode(data.code);
-    };
-
-    fetchData();
-  }, []);
   return (
-    <div>
-       <Provider store={store}>
+    <Provider store={store}>
       <BrowserRouter>
         <Routes>
+          {roomCode ? (
+            <Route path="/" element={<Navigate to={`/room/${roomCode}`} replace />} />
+          ) : (
+            <Route path="/" element={<Homepage roomCode={roomCode} />} />
+          )}
           <Route path="/create" element={<CreateRoomPage update={false} code={0} />} />
           <Route path="/join" element={<RoomjoinPage />} />
           <Route path="/update" element={<UpdateRoom />} />
-          <Route path="/room/:roomcode" element={<Room setRoom={setRoomCode}/>} />
-          
-          {/* <Route path="/" element={<Homepage />} /> */}
-          
-        {roomCode ? (
-          <Route  element={<Navigate to={`/room/${roomCode}`} replace />} />
-        ) : (
-          <Route path="/" element={<Homepage roomCode={roomCode} />} />)}
-          
+          <Route path="/room/:roomcode" element={<Room setRoom={setRoomCode} />} />
         </Routes>
+        <FetchRoomCode setRoomCode={setRoomCode} />
       </BrowserRouter>
-      </Provider>
-    </div>
-  )
-}
+    </Provider>
+  );
+};
 
-export default App
+const FetchRoomCode = ({ setRoomCode }) => {
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await fetch("/api/user-in-room");
+        const data = await response.json();
+        console.log(data);
+        console.log('data.code:', data.code);
+        if (data.code) {
+          setRoomCode(data.code);
+          navigate(`/room/${data.code}`);
+        }
+      } catch (error) {
+        console.error('Error fetching room code:', error);
+      }
+    };
+
+    fetchData();
+  }, [navigate, setRoomCode]);
+
+  return null;
+};
+
+export default App;
 
 const appDiv = document.getElementById("app");
-render(<App />, appDiv)
-
+render(<App />, appDiv);
