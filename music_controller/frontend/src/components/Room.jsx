@@ -1,79 +1,3 @@
-// import React, { useEffect, useState } from 'react';
-// import { useSelector } from 'react-redux';
-// import { useParams } from 'react-router-dom';
-// import { useNavigate, Navigate } from 'react-router-dom';
-
-// import CreateRoomPage from './CreateRoomPage.jsx';
-
-// const Room = ({ setRoom }) => {
-//     const [guest_can_pause, setGuest_can_pause] = useState(false);
-//     const [votes_to_skip, setVotes_to_skip] = useState(2);
-//     const [isHost, setIsHost] = useState(false);
-//     const [setting, setsetting] = useState(false)
-//     const { roomcode } = useParams();
-//     const [spotify_authenticated, Setspotify_authenticated] = useState(false)
-//     const navigate = useNavigate();
-
-//     function authenticate_spotify(){
-//         fetch('/spotify/is-authenticated').then((res)=>{
-//             return res.json
-//         }).then((data)=>{
-//             console.log(data);
-//             Setspotify_authenticated(data.status)
-//             if(!spotify_authenticated){
-//                 fetch('/spotify/get-auth-url').then((res)=>res.json()).then((data)=>{
-//                     window.location.replace(data.url)
-//                 })
-//             }
-//         })
-//     }
-//     const getRoomDetails = () => {
-        
-//         fetch(`/api/get-room?code=${roomcode}`)
-//             .then((res) => {return res.json()})
-//             .then((data) => {
-//                 console.log(data);
-//                 setGuest_can_pause(data.guest_can_pause);
-//                 setVotes_to_skip(data.votes_to_skip);
-//                 setIsHost(data.is_host);
-//                 console.log(isHost,"ishost ");
-//                 console.log("inne data.is_host : ",data.is_host);
-//             });
-//             console.log("data.is_host",isHost);
-//         if (!isHost){
-//             authenticate_spotify();
-//         }
-//     };
-
-//     useEffect(() => {
-//         getRoomDetails();
-//     }, [setting]);
-
-//     const leaveRoom = () => {
-//         // Add logic to leave the room, e.g., redirect or perform an action
-//         console.log("Leaving room...");
-//         const requestOptions = {
-//             method: "POST",
-//             headers: { "Content-Type": "application/json" },
-//         };
-
-//         fetch("/api/leave-room", requestOptions).then((r) => {
-//             setRoom(null)
-//             navigate(`/`);
-//         })
-//     };
-
-
-
-//     if (setting) {
-//         return (
-//             <>
-//                 <CreateRoomPage update={true} code={roomcode} guest_can_pauses={guest_can_pause} votes_to_skips={votes_to_skip} getRoomDetails={getRoomDetails} setSetting={setsetting} />
-
-
-//             </>
-//         )
-//     }
 import React, { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 
@@ -108,7 +32,7 @@ const Room = ({ setRoom }) => {
         fetch(`/api/get-room?code=${roomcode}`)
             .then((res) => res.json())
             .then((data) => {
-                console.log(data);
+                console.log("DATA is",data);
                 setGuest_can_pause(data.guest_can_pause);
                 setVotes_to_skip(data.votes_to_skip);
                 setIsHost(data.is_host);
