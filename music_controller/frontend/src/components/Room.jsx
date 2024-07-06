@@ -12,6 +12,8 @@ const Room = ({ setRoom }) => {
     const [spotify_authenticated, setSpotify_authenticated] = useState(false)
     const navigate = useNavigate();
     const [word, setword] = useState("")
+    const [song, setSong] = useState()
+    const [para, setpara] = useState()
     const authenticate_spotify = () => {
         fetch('/spotify/is-authenticated')
             .then((res) => res.json())
@@ -49,6 +51,29 @@ const Room = ({ setRoom }) => {
     useEffect(() => {
         getRoomDetails();
     }, [setting]);
+    
+    useEffect(()=>{
+        getCurrentSong();
+
+    },[1000])
+
+    const getCurrentSong=()=>{
+        fetch('/spotify/current-song').then((res)=>res.json()).then((data)=>{
+            setSong(data)
+                console.log(data);
+            setpara( <p>
+                Title : {data.title} <br />
+                arist : {data.artist} <br />
+                duration : {data.duration}<br />
+                <img src={data.image_url} alt="Image" />
+                time:{data.time}<br />
+                {/* {data.image_url}<br /> */}
+                Paused : {data.is_playing?"No":"Yes"}<br />
+                Votes : {data.votes}<br />
+                id:{data.id}<br />
+                </p>)
+        })
+    }
 
     const leaveRoom = () => {
         console.log("Leaving room...");
@@ -93,6 +118,15 @@ const Room = ({ setRoom }) => {
                     <p className="text-gray-700 mb-2">
                         Host: {isHost.toString()}
                     </p>
+                   {para}
+                        {/* 'title': item.get('name'),
+            'artist': artist_string,
+            'duration': duration,
+            'time': progress,
+            'image_url': album_cover,
+            'is_playing': is_playing,
+            'votes': 0,
+            'id': song_id */}
 
                     <button
                         onClick={leaveRoom}
